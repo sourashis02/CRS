@@ -189,30 +189,41 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           setState(() {
                             showspinner = true;
                           });
-                          http.Response response =
-                              await citizenforgotpassword(email);
-                          String data = response.body;
-                          dynamic decodedData = jsonDecode(data);
-                          // showspinner = true;
-                          if (response.statusCode == 200) {
+                          if (email == null) {
                             setState(() {
                               showspinner = false;
                             });
                             Alert(
                               context: context,
-                              title: 'Sucessfully Email Sent',
-                              desc: decodedData['message'],
+                              title: 'Please Fill the Form!',
+                              desc: 'Invalid E-mail',
                             ).show();
                           } else {
-                            Alert(
-                              context: context,
-                              title: 'Error ${response.statusCode}!',
-                              desc: decodedData['message'],
-                            ).show();
+                            http.Response response =
+                                await citizenforgotpassword(email);
+                            String data = response.body;
+                            dynamic decodedData = jsonDecode(data);
+                            // showspinner = true;
+                            if (response.statusCode == 200) {
+                              setState(() {
+                                showspinner = false;
+                              });
+                              Alert(
+                                context: context,
+                                title: 'Sucessfully Email Sent',
+                                desc: decodedData['message'],
+                              ).show();
+                            } else {
+                              Alert(
+                                context: context,
+                                title: 'Error ${response.statusCode}!',
+                                desc: decodedData['message'],
+                              ).show();
+                            }
+                            setState(() {
+                              showspinner = false;
+                            });
                           }
-                          setState(() {
-                            showspinner = false;
-                          });
                         },
                       ),
                     ],

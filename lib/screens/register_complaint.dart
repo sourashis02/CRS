@@ -104,7 +104,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           dateMask: 'd MMM, yyyy',
                           initialValue: null,
                           firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          lastDate: DateTime.now(),
                           icon: Icon(Icons.event),
                           dateLabelText: 'Date',
                           timeLabelText: "Time",

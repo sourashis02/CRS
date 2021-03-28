@@ -91,36 +91,47 @@ class _LoginScreenState extends State<LoginScreen> {
                         setState(() {
                           showspinner = true;
                         });
-                        http.Response response =
-                            await citizenlogin(email, password);
-                        print(response.statusCode);
-                        String data = response.body;
-                        decodedData = jsonDecode(data);
-                        if (response.statusCode == 200) {
+                        if (email == null && password == null) {
                           setState(() {
                             showspinner = false;
                           });
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => DashBoard(
-                                name: decodedData['name'],
-                                email: decodedData['email'],
-                                token: decodedData['token'],
-                                img: decodedData['id'],
-                              ),
-                            ),
-                          );
-                        } else {
                           Alert(
                             context: context,
-                            title: 'Error ${response.statusCode}!',
-                            desc: decodedData['message'],
+                            title: 'Please Fill the Login Form!',
+                            desc: 'Invalid Username & Password',
                           ).show();
+                        } else {
+                          http.Response response =
+                              await citizenlogin(email, password);
+                          print(response.statusCode);
+                          String data = response.body;
+                          decodedData = jsonDecode(data);
+                          if (response.statusCode == 200) {
+                            setState(() {
+                              showspinner = false;
+                            });
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => DashBoard(
+                                  name: decodedData['name'],
+                                  email: decodedData['email'],
+                                  token: decodedData['token'],
+                                  img: decodedData['id'],
+                                ),
+                              ),
+                            );
+                          } else {
+                            Alert(
+                              context: context,
+                              title: 'Error ${response.statusCode}!',
+                              desc: decodedData['message'],
+                            ).show();
+                          }
+                          setState(() {
+                            showspinner = false;
+                          });
                         }
-                        setState(() {
-                          showspinner = false;
-                        });
                       },
                       buttonName: 'Login',
                     ),
